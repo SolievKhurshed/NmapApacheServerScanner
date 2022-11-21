@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "NmapApacheServerScanner": {
+      "commandName": "Project"
+    }
+  }
+}
