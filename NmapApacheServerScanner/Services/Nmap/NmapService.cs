@@ -86,7 +86,7 @@ public class NmapService : INmapService
     {
         if (!string.IsNullOrEmpty(outLine.Data))
         {
-            output.Append(Environment.NewLine + outLine.Data);
+            output.Append(outLine.Data);
         }
     }
 }

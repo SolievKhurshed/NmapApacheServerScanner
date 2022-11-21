@@ -5,6 +5,7 @@ using NmapApacheServerScanner.Configuration.AppSettings;
 using NmapApacheServerScanner.Configuration.AutoMapperProfiles;
 using NmapApacheServerScanner.Services.App;
 using NmapApacheServerScanner.Services.Nmap;
+using NmapApacheServerScanner.Services.Xml;
 using Serilog;
 
 namespace NmapApacheServerScanner;
@@ -26,6 +27,7 @@ public class Program
                     .AddConfig(context.Configuration)
                     .AddTransient<IAppService, AppService>()
                     .AddTransient<INmapService, NmapService>()
+                    .AddTransient<IXmlParserService, XmlParserService>()
                     .AddAutoMapper(typeof(AppMapperProfile).Assembly);
             })
             .UseSerilog((context, config) =>
