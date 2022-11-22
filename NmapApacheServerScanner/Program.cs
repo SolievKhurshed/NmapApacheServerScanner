@@ -1,8 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using LinqToDB.AspNet;
+using LinqToDB.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NmapApacheServerScanner.Configuration.AppSettings;
 using NmapApacheServerScanner.Configuration.AutoMapperProfiles;
+using NmapApacheServerScanner.DAL.DataConnections;
+using NmapApacheServerScanner.DAL.Repositories;
 using NmapApacheServerScanner.Services.App;
 using NmapApacheServerScanner.Services.Nmap;
 using NmapApacheServerScanner.Services.Xml;
@@ -28,6 +32,11 @@ public class Program
                     .AddTransient<IAppService, AppService>()
                     .AddTransient<INmapService, NmapService>()
                     .AddTransient<IXmlParserService, XmlParserService>()
+                    .AddTransient<INmapRepository, NmapRepository>()
+                    .AddLinqToDBContext<NmapDataConnection>((provider, options) =>
+                    {
+                        options.UsePostgreSQL(context.Configuration.GetConnectionString("Default"));
+                    }, ServiceLifetime.Transient)
                     .AddAutoMapper(typeof(AppMapperProfile).Assembly);
             })
             .UseSerilog((context, config) =>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using NmapApacheServerScanner.Configuration.AppSettings;
+using NmapApacheServerScanner.Models.Nmap;
 using System.Diagnostics;
 using System.Text;
 using ILogger = Serilog.ILogger;
@@ -26,7 +27,7 @@ public class NmapService : INmapService
     /// Запускает процесс nmap
     /// </summary>
     /// <returns>Возвращает xml в виде строки </returns>
-    public async Task<string> RunNmapScannerAsync()
+    public async Task<NmapScanResult> RunNmapScannerAsync()
     {
         var scriptArguments = GetArguments();
 
@@ -63,7 +64,11 @@ public class NmapService : INmapService
 
             await Task.WhenAny(nmapProcTaskEventHandled.Task, Task.Delay(TimeSpan.FromSeconds(_nmapSettings.TaskDelaySeconds)));
 
-            return output.ToString();
+            return new NmapScanResult
+            {
+                Host = _nmapSettings.Arguments.ScanningHost,
+                FullResult = output.ToString()
+            };
         }
     }
 
@@ -77,7 +82,7 @@ public class NmapService : INmapService
         _logger.Debug("Завершение процесса nmap. Exit time: {exitTime}, Exit code: {exitCode}, Elapsed time in milliseconds: {elapsedTime}",
             nmapProc.ExitTime, nmapProc.ExitCode, Math.Round((nmapProc.ExitTime - nmapProc.StartTime).TotalMilliseconds));
 
-        _logger.Debug(output.ToString());
+        _logger.Debug("Результат сканирования: {scanResult}", output.ToString());
 
         nmapProcTaskEventHandled.TrySetResult(true);
     }
