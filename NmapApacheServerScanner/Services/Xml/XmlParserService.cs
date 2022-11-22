@@ -20,7 +20,7 @@ public class XmlParserService : IXmlParserService
     /// <returns></returns>
     public NmapRun DeserializeXml(string xml)
     {
-        _logger.Debug("Попытка десериализировать xml...");
+        _logger.Debug("Попытка десериализировать xml.");
 
         var xs = new XmlSerializer(typeof(NmapRun));
 

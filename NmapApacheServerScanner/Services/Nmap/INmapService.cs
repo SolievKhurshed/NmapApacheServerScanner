@@ -1,6 +1,8 @@
-﻿namespace NmapApacheServerScanner.Services.Nmap;
+﻿using NmapApacheServerScanner.Models.Nmap;
+
+namespace NmapApacheServerScanner.Services.Nmap;
 
 public interface INmapService
 {
-    Task<string> RunNmapScannerAsync();
+    Task<NmapScanResult> RunNmapScannerAsync();
 }
